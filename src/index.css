@@ -29,7 +29,7 @@ html{
     --secondary-glow: 241 245 249; /* slightly darker gray */
 
     --muted: 248 250 252;         /* very light blue-gray */
-    --muted-foreground: 71 85 105; /* slate-500 for muted text */
+    --muted-foreground: black; /* slate-500 for muted text */
 
     --accent: 240 249 255;        /* very light blue accent */
     --accent-foreground: 217 91% 60%; /* blue text */
