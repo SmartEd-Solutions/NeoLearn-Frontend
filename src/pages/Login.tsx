@@ -1,3 +1,4 @@
+
 import React, { useState } from 'react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -37,7 +38,7 @@ const Login = () => {
     <div className="min-h-screen bg-gradient-hero flex items-center justify-center p-4">
       <div className="w-full max-w-md">
         {/* Back to home */}
-        <Link to="/" className="inline-flex items-center text-white/80 hover:text-white mb-8 transition-smooth">
+        <Link to="/" className="inline-flex items-center text-primary-foreground/80 hover:text-primary-foreground mb-8 transition-smooth">
           <ArrowLeft className="h-4 w-4 mr-2" />
           Back to Home
         </Link>
@@ -46,7 +47,7 @@ const Login = () => {
           <CardHeader className="text-center pb-8">
             <div className="flex justify-center mb-4">
               <div className="bg-gradient-hero p-3 rounded-xl shadow-glow">
-                <GraduationCap className="h-8 w-8 text-white" />
+                <GraduationCap className="h-8 w-8 text-primary-foreground" />
               </div>
             </div>
             <CardTitle className="text-2xl font-bold text-foreground">Welcome Back</CardTitle>
@@ -100,7 +101,7 @@ const Login = () => {
                   <input type="checkbox" className="rounded border-border" />
                   <span className="text-muted-foreground">Remember me</span>
                 </label>
-                <a href="#" className="text-primary hover:text-primary-glow transition-smooth">
+                <a href="#" className="text-primary hover:text-primary/90 transition-smooth">
                   Forgot password?
                 </a>
               </div>
@@ -116,7 +117,7 @@ const Login = () => {
 
             <div className="mt-6 text-center text-sm text-muted-foreground">
               Don't have an account?{' '}
-              <Link to="/register" className="text-primary hover:text-primary-glow transition-smooth font-medium">
+              <Link to="/register" className="text-primary hover:text-primary/90 transition-smooth font-medium">
                 Sign up here
               </Link>
             </div>
