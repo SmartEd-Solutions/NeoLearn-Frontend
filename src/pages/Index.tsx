@@ -75,12 +75,12 @@ const Index = () => {
           <h2 className="text-3xl md:text-4xl font-bold mb-6">
             Ready to Transform Your School Management?
           </h2>
-          <p className="text-lg text-blue-100 mb-8 max-w-2xl mx-auto">
+          <p className="text-lg text-white/90 mb-8 max-w-2xl mx-auto">
             Join thousands of educators who have streamlined their school operations with EduManager. 
             Start your free trial today and see the difference.
           </p>
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
-            <Button size="lg" className="bg-secondary hover:bg-secondary-glow text-white shadow-elegant hover:shadow-glow transition-all duration-300" asChild>
+            <Button size="lg" className="bg-white text-primary hover:bg-white/90 shadow-elegant hover:shadow-glow transition-all duration-300" asChild>
               <a href="/register">
                 Start Free Trial
                 <ArrowRight className="ml-2 h-5 w-5" />

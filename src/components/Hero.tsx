@@ -16,13 +16,13 @@ const Hero = () => {
             <span className="text-secondary-glow">Made Simple</span>
           </h1>
           
-          <p className="text-lg md:text-xl text-blue-100 mb-8 max-w-3xl mx-auto leading-relaxed">
+          <p className="text-lg md:text-xl text-white/90 mb-8 max-w-3xl mx-auto leading-relaxed">
             Streamline your educational institution with our comprehensive management system. 
             Handle timetables, attendance, performance tracking, and AI-powered insights all in one place.
           </p>
 
           <div className="flex flex-col sm:flex-row gap-4 justify-center mb-12">
-            <Button size="lg" className="bg-secondary hover:bg-secondary-glow text-white shadow-elegant hover:shadow-glow transition-all duration-300" asChild>
+            <Button size="lg" className="bg-white text-primary hover:bg-white/90 shadow-elegant hover:shadow-glow transition-all duration-300" asChild>
               <a href="/register">Start Free Trial</a>
             </Button>
             <Button size="lg" variant="outline" className="border-white/30 text-white hover:bg-white/10 backdrop-blur-sm transition-smooth" asChild>
@@ -32,25 +32,25 @@ const Hero = () => {
 
           {/* Feature icons */}
           <div className="grid grid-cols-2 md:grid-cols-4 gap-8 max-w-2xl mx-auto">
-            <div className="flex flex-col items-center space-y-2 text-blue-100">
+            <div className="flex flex-col items-center space-y-2 text-white/90">
               <div className="bg-white/10 p-3 rounded-xl backdrop-blur-sm">
                 <Calendar className="h-6 w-6" />
               </div>
               <span className="text-sm font-medium">Timetables</span>
             </div>
-            <div className="flex flex-col items-center space-y-2 text-blue-100">
+            <div className="flex flex-col items-center space-y-2 text-white/90">
               <div className="bg-white/10 p-3 rounded-xl backdrop-blur-sm">
                 <Users className="h-6 w-6" />
               </div>
               <span className="text-sm font-medium">Attendance</span>
             </div>
-            <div className="flex flex-col items-center space-y-2 text-blue-100">
+            <div className="flex flex-col items-center space-y-2 text-white/90">
               <div className="bg-white/10 p-3 rounded-xl backdrop-blur-sm">
                 <BookOpen className="h-6 w-6" />
               </div>
               <span className="text-sm font-medium">Performance</span>
             </div>
-            <div className="flex flex-col items-center space-y-2 text-blue-100">
+            <div className="flex flex-col items-center space-y-2 text-white/90">
               <div className="bg-white/10 p-3 rounded-xl backdrop-blur-sm">
                 <Brain className="h-6 w-6" />
               </div>
