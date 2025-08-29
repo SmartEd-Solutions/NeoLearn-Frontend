@@ -2,6 +2,7 @@ import React from 'react';
 import { Button } from '@/components/ui/button';
 import { GraduationCap, Menu, X } from 'lucide-react';
 import { useState } from 'react';
+import '../index.css'
 
 const Header = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
@@ -16,8 +17,8 @@ const Header = () => {
               <GraduationCap className="h-8 w-8 text-white" />
             </div>
             <div>
-              <h1 className="text-xl font-bold text-foreground">EduManager</h1>
-              <p className="text-xs text-muted-foreground">School Management System</p>
+              <h1 className="text-xl font-bold text-black">EduManager</h1>
+              <p className="text-xs  text-black">School Management System</p>
             </div>
           </div>
 

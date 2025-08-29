@@ -4,7 +4,7 @@ import { BookOpen, Calendar, Users, Brain } from 'lucide-react';
 
 const Hero = () => {
   return (
-    <section className="py-16 lg:py-24 bg-gradient-hero text-white relative overflow-hidden">
+    <section className="py-16 lg:py-24 bg-black text-white relative overflow-hidden">
       {/* Background decoration */}
       <div className="absolute inset-0 bg-[url('data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNDAiIGhlaWdodD0iNDAiIHZpZXdCb3g9IjAgMCA0MCA0MCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj4KICA8ZGVmcz4KICAgIDxwYXR0ZXJuIGlkPSJncmlkIiB3aWR0aD0iNDAiIGhlaWdodD0iNDAiIHBhdHRlcm5Vbml0cz0idXNlclNwYWNlT25Vc2UiPgogICAgICA8cGF0aCBkPSJNIDQwIDAgTCAwIDAgMCA0MCIgZmlsbD0ibm9uZSIgc3Ryb2tlPSJyZ2JhKDI1NSwyNTUsMjU1LDAuMSkiIHN0cm9rZS13aWR0aD0iMSIvPgogICAgPC9wYXR0ZXJuPgogIDwvZGVmcz4KICA8cmVjdCB3aWR0aD0iMTAwJSIgaGVpZ2h0PSIxMDAlIiBmaWxsPSJ1cmwoI2dyaWQpIiAvPgo8L3N2Zz4=')] opacity-20"></div>
       
@@ -22,10 +22,10 @@ const Hero = () => {
           </p>
 
           <div className="flex flex-col sm:flex-row gap-4 justify-center mb-12">
-            <Button size="lg" className="bg-white text-primary hover:bg-white/90 shadow-elegant hover:shadow-glow transition-all duration-300" asChild>
+            <Button size="lg" className="bg-white text-black hover:bg-white/90 shadow-elegant hover:shadow-glow transition-all duration-300" asChild>
               <a href="/register">Start Free Trial</a>
             </Button>
-            <Button size="lg" variant="outline" className="border-white/30 text-white hover:bg-white/10 backdrop-blur-sm transition-smooth" asChild>
+            <Button size="lg" variant="outline" className="border-white/30 text-black hover:bg-white/10 backdrop-blur-sm transition-smooth" asChild>
               <a href="/dashboard">Explore Dashboard</a>
             </Button>
           </div>
