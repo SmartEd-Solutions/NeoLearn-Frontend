@@ -1,3 +1,4 @@
+
 import React, { useState } from 'react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -47,7 +48,7 @@ const Register = () => {
     <div className="min-h-screen bg-gradient-hero flex items-center justify-center p-4">
       <div className="w-full max-w-md">
         {/* Back to home */}
-        <Link to="/" className="inline-flex items-center text-white/80 hover:text-white mb-8 transition-smooth">
+        <Link to="/" className="inline-flex items-center text-primary-foreground/80 hover:text-primary-foreground mb-8 transition-smooth">
           <ArrowLeft className="h-4 w-4 mr-2" />
           Back to Home
         </Link>
@@ -56,7 +57,7 @@ const Register = () => {
           <CardHeader className="text-center pb-8">
             <div className="flex justify-center mb-4">
               <div className="bg-gradient-hero p-3 rounded-xl shadow-glow">
-                <GraduationCap className="h-8 w-8 text-white" />
+                <GraduationCap className="h-8 w-8 text-primary-foreground" />
               </div>
             </div>
             <CardTitle className="text-2xl font-bold text-foreground">Join EduManager</CardTitle>
@@ -161,9 +162,9 @@ const Register = () => {
 
               <div className="text-xs text-muted-foreground">
                 By creating an account, you agree to our{' '}
-                <a href="#" className="text-primary hover:text-primary-glow transition-smooth">Terms of Service</a>
+                <a href="#" className="text-primary hover:text-primary/90 transition-smooth">Terms of Service</a>
                 {' '}and{' '}
-                <a href="#" className="text-primary hover:text-primary-glow transition-smooth">Privacy Policy</a>
+                <a href="#" className="text-primary hover:text-primary/90 transition-smooth">Privacy Policy</a>
               </div>
 
               <Button 
@@ -177,7 +178,7 @@ const Register = () => {
 
             <div className="mt-6 text-center text-sm text-muted-foreground">
               Already have an account?{' '}
-              <Link to="/login" className="text-primary hover:text-primary-glow transition-smooth font-medium">
+              <Link to="/login" className="text-primary hover:text-primary/90 transition-smooth font-medium">
                 Sign in here
               </Link>
             </div>

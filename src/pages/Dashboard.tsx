@@ -1,3 +1,4 @@
+
 import React, { useState } from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
@@ -98,7 +99,7 @@ const Dashboard = () => {
                   <CardTitle className="text-lg">Late Arrivals</CardTitle>
                 </CardHeader>
                 <CardContent>
-                  <div className="text-3xl font-bold text-orange-500 mb-2">23</div>
+                  <div className="text-3xl font-bold text-secondary-foreground mb-2">23</div>
                   <p className="text-muted-foreground text-sm">Students arrived after 8:30 AM</p>
                 </CardContent>
               </Card>
@@ -107,7 +108,7 @@ const Dashboard = () => {
                   <CardTitle className="text-lg">Absent Students</CardTitle>
                 </CardHeader>
                 <CardContent>
-                  <div className="text-3xl font-bold text-red-500 mb-2">91</div>
+                  <div className="text-3xl font-bold text-destructive mb-2">91</div>
                   <p className="text-muted-foreground text-sm">Includes excused and unexcused</p>
                 </CardContent>
               </Card>
@@ -151,7 +152,7 @@ const Dashboard = () => {
                   <CardTitle className="text-lg">Top Performers</CardTitle>
                 </CardHeader>
                 <CardContent>
-                  <div className="text-3xl font-bold text-emerald-500 mb-2">127</div>
+                  <div className="text-3xl font-bold text-primary mb-2">127</div>
                   <p className="text-muted-foreground text-sm">Students with GPA &gt; 9.0</p>
                 </CardContent>
               </Card>
@@ -160,7 +161,7 @@ const Dashboard = () => {
                   <CardTitle className="text-lg">Need Support</CardTitle>
                 </CardHeader>
                 <CardContent>
-                  <div className="text-3xl font-bold text-orange-500 mb-2">34</div>
+                  <div className="text-3xl font-bold text-secondary-foreground mb-2">34</div>
                   <p className="text-muted-foreground text-sm">Students with GPA &lt; 6.0</p>
                 </CardContent>
               </Card>
@@ -169,7 +170,7 @@ const Dashboard = () => {
                   <CardTitle className="text-lg">Improvement</CardTitle>
                 </CardHeader>
                 <CardContent>
-                  <div className="text-3xl font-bold text-blue-500 mb-2">89</div>
+                  <div className="text-3xl font-bold text-primary mb-2">89</div>
                   <p className="text-muted-foreground text-sm">Students showing progress</p>
                 </CardContent>
               </Card>
@@ -250,8 +251,8 @@ const Dashboard = () => {
                         <p className="text-2xl font-bold text-foreground">{stat.value}</p>
                       </div>
                       <div className={`text-sm ${
-                        stat.changeType === 'positive' ? 'text-emerald-600' : 
-                        stat.changeType === 'negative' ? 'text-red-600' : 'text-muted-foreground'
+                        stat.changeType === 'positive' ? 'text-primary' : 
+                        stat.changeType === 'negative' ? 'text-destructive' : 'text-muted-foreground'
                       }`}>
                         {stat.change}
                       </div>
@@ -272,9 +273,9 @@ const Dashboard = () => {
                     <div key={activity.id} className="flex items-center justify-between p-4 bg-gradient-card rounded-lg">
                       <div className="flex items-center space-x-4">
                         <div className={`w-2 h-2 rounded-full ${
-                          activity.status === 'In Progress' ? 'bg-blue-500' :
-                          activity.status === 'Completed' ? 'bg-emerald-500' :
-                          activity.status === 'Upcoming' ? 'bg-orange-500' :
+                          activity.status === 'In Progress' ? 'bg-primary' :
+                          activity.status === 'Completed' ? 'bg-primary' :
+                          activity.status === 'Upcoming' ? 'bg-secondary-foreground' :
                           'bg-muted-foreground'
                         }`} />
                         <div>
@@ -303,7 +304,7 @@ const Dashboard = () => {
           <div className="flex justify-between items-center py-4">
             <div className="flex items-center space-x-4">
               <div className="bg-gradient-hero p-2 rounded-xl shadow-glow">
-                <GraduationCap className="h-6 w-6 text-white" />
+                <GraduationCap className="h-6 w-6 text-primary-foreground" />
               </div>
               <div>
                 <h1 className="text-lg font-bold text-foreground">EduManager</h1>
@@ -327,7 +328,7 @@ const Dashboard = () => {
                 variant={activeSection === item.id ? "default" : "ghost"}
                 className={`w-full justify-start ${
                   activeSection === item.id 
-                    ? "bg-gradient-hero shadow-glow text-white" 
+                    ? "bg-gradient-hero shadow-glow text-primary-foreground" 
                     : "hover:bg-muted"
                 }`}
                 onClick={() => setActiveSection(item.id)}
