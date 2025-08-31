@@ -1,0 +1,110 @@
+@import 'tailwindcss/base';
+@import 'tailwindcss/components';
+@import 'tailwindcss/utilities';
+
+/* School Management System Design System - Academic Theme */
+html{
+  scroll-behavior: smooth;
+}
+@layer base {
+  :root {
+    /* White, Blue, and Black theme */
+    --background: 255 255 255;    /* pure white */
+    --foreground: 0 0 0;          /* pure black for text */
+
+    --card: 255 255 255;          /* white cards */
+    --card-foreground: 0 0 0;     /* black text on cards */
+
+    --popover: 255 255 255;
+    --popover-foreground: 0 0 0;
+
+    /* Vibrant blue primary */
+    --primary: 217 91% 60%;       /* bright blue */
+    --primary-foreground: 255 255 255; /* white text on blue */
+    --primary-glow: 217 100% 70%; /* brighter blue glow */
+    
+    /* Clean secondary with white/light gray */
+    --secondary: 248 250 252;     /* very light gray */
+    --secondary-foreground: 0 0 0; /* black text */
+    --secondary-glow: 241 245 249; /* slightly darker gray */
+
+    --muted: 248 250 252;         /* very light blue-gray */
+    --muted-foreground: black; /* slate-500 for muted text */
+
+    --accent: 240 249 255;        /* very light blue accent */
+    --accent-foreground: 217 91% 60%; /* blue text */
+
+    --destructive: 0 84% 60%;
+    --destructive-foreground: 255 255 255;
+
+    --border: 229 231 235;        /* light gray border */
+    --input: 255 255 255;         /* white inputs */
+    --ring: 217 91% 60%;          /* blue focus ring */
+
+    /* White, Blue, and Black design tokens */
+    --gradient-hero: linear-gradient(135deg, hsl(217 91% 60%), hsl(217 100% 70%));
+    --gradient-card: linear-gradient(145deg, hsl(255 255 255), hsl(250 250 250));
+    --gradient-accent: linear-gradient(135deg, hsl(240 249 255), hsl(217 91% 95%));
+    
+    --shadow-elegant: 0 10px 30px -10px hsl(217 91% 60% / 0.3);
+    --shadow-card: 0 4px 20px -2px hsl(15 23 42 / 0.08);
+    --shadow-glow: 0 0 40px hsl(217 91% 60% / 0.4);
+    
+    --transition-smooth: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    --transition-bounce: all 0.4s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+
+    --radius: 0.75rem;
+  }
+
+  /* Academic utility classes */
+  .gradient-hero {
+    background: var(--gradient-hero);
+  }
+  
+  .gradient-card {
+    background: var(--gradient-card);
+  }
+  
+  .gradient-accent {
+    background: var(--gradient-accent);
+  }
+  
+  .shadow-elegant {
+    box-shadow: var(--shadow-elegant);
+  }
+  
+  .shadow-card {
+    box-shadow: var(--shadow-card);
+  }
+  
+  .shadow-glow {
+    box-shadow: var(--shadow-glow);
+  }
+  
+  .transition-smooth {
+    transition: var(--transition-smooth);
+  }
+  
+  .transition-bounce {
+    transition: var(--transition-bounce);
+  }
+
+  /* Academic hover effects */
+  .hover-lift {
+    @apply transition-smooth hover:translate-y-[-2px] hover:shadow-elegant;
+  }
+  
+  .hover-glow {
+    @apply transition-smooth hover:shadow-glow;
+  }
+}
+
+@layer base {
+  * {
+    @apply border-border;
+  }
+
+  body {
+    @apply bg-background text-foreground;
+  }
+}
