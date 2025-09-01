@@ -88,7 +88,7 @@ export const usePerformance = (userId?: string) => {
 
     // Calculate averages for each subject
     Object.keys(subjectStats).forEach(subject => {
-      subjectStats[subject].average = subjectStats[subject].total / subjectStats[subject].count;
+      (subjectStats[subject] as any).average = subjectStats[subject].total / subjectStats[subject].count;
     });
 
     const recentGrade = performance.length > 0 ? performance[0].grade : 'N/A';

@@ -30,12 +30,20 @@ export const useStudents = (userRole?: string, userId?: string) => {
       // Apply role-based filtering
       if (userRole === 'teacher') {
         // Teachers can only see students in their assigned classes
-        query = query.in('class_id', 
-          supabase
-            .from('classes')
-            .select('id')
-            .eq('teacher_id', userId)
-        );
+        const { data: teacherClasses } = await supabase
+          .from('classes')
+          .select('id')
+          .eq('teacher_id', userId);
+        
+        const classIds = teacherClasses?.map(c => c.id) || [];
+        if (classIds.length > 0) {
+          query = query.in('class_id', classIds);
+        } else {
+          // Teacher has no classes, return empty array
+          setStudents([]);
+          setLoading(false);
+          return;
+        }
       } else if (userRole === 'student') {
         // Students can only see their own record
         query = query.eq('user_id', userId);

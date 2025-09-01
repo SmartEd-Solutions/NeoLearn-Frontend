@@ -1,11 +1,7 @@
 import { createClient } from '@supabase/supabase-js';
 
-const supabaseUrl = import.meta.env.VITE_SUPABASE_URL;
-const supabaseAnonKey = import.meta.env.VITE_SUPABASE_ANON_KEY;
-
-if (!supabaseUrl || !supabaseAnonKey) {
-  throw new Error('Missing Supabase environment variables');
-}
+const supabaseUrl = 'https://mswupuykzpooozfbitmx.supabase.co';
+const supabaseAnonKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im1zd3VwdXlrenBvb296ZmJpdG14Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTY2Mjg0MzEsImV4cCI6MjA3MjIwNDQzMX0.uQ_CcDv9o1DcjDyoL2bybkDHs4LE9AqmpE4vXawm-Kg';
 
 export const supabase = createClient(supabaseUrl, supabaseAnonKey);
 
@@ -13,18 +9,18 @@ export const supabase = createClient(supabaseUrl, supabaseAnonKey);
 export type UserRole = 'student' | 'teacher' | 'admin';
 export type DayOfWeek = 'Monday' | 'Tuesday' | 'Wednesday' | 'Thursday' | 'Friday' | 'Saturday' | 'Sunday';
 export type AttendanceStatus = 'present' | 'absent' | 'late' | 'excused';
-export type ThemeOption = 'light' | 'dark' | 'system';
 export type StudentStatus = 'active' | 'inactive' | 'graduated' | 'transferred';
+export type ThemeOption = 'light' | 'dark' | 'system';
 
 export interface User {
   id: string;
   full_name: string;
   email: string;
   role: UserRole;
-  created_at: string;
   phone?: string;
   address?: string;
   date_of_birth?: string;
+  created_at: string;
 }
 
 export interface Class {

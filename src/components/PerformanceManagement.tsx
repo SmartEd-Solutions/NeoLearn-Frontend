@@ -7,6 +7,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@
 import { Textarea } from '@/components/ui/textarea';
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from '@/components/ui/dialog';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
+import { Badge } from '@/components/ui/badge';
 import { Plus, TrendingUp, Award, BookOpen } from 'lucide-react';
 import { usePerformance } from '@/hooks/usePerformance';
 import { useStudents } from '@/hooks/useStudents';
@@ -69,7 +70,7 @@ const PerformanceManagement = () => {
 
   const subjectData = Object.entries(performanceStats.subjectStats).map(([subject, stats]) => ({
     subject: subject.substring(0, 10),
-    average: Math.round(stats.average || 0),
+    average: Math.round((stats as any).average || 0),
     count: stats.count,
   }));
 
