@@ -32,11 +32,14 @@ export const usePerformance = (userId?: string) => {
     }
   };
 
-  const addPerformanceRecord = async (record: Omit<PerformanceRecord, 'id' | 'recorded_at'>) => {
+  const addPerformanceRecord = async (record: Omit<PerformanceRecord, 'id' | 'recorded_at'> & { recorded_by?: string }) => {
     try {
       const { data, error } = await supabase
         .from('performance')
-        .insert([record])
+        .insert([{
+          ...record,
+          recorded_at: new Date().toISOString(),
+        }])
         .select()
         .single();
 

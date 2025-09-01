@@ -62,29 +62,33 @@ export const useAssistant = (userId?: string) => {
 
   const generateMockResponse = async (prompt: string): Promise<string> => {
     // Simulate AI processing delay
-    await new Promise(resolve => setTimeout(resolve, 1500));
+    await new Promise(resolve => setTimeout(resolve, 1000));
 
     // Generate contextual responses based on prompt keywords
     const lowerPrompt = prompt.toLowerCase();
     
     if (lowerPrompt.includes('attendance')) {
-      return `Based on your attendance data, here are the insights: Your current attendance rate is excellent at 94.2%. You've been present for 47 out of 50 school days this semester. Consider maintaining this consistency for optimal academic performance.`;
+      return `📊 **Attendance Analysis**: Current school-wide attendance rate is 92.8%. Top performing classes: Grade 10A (96.5%), Grade 9B (94.2%). Classes needing attention: Grade 8A (87.3%). Recommendation: Implement early intervention for students with >3 consecutive absences.`;
     }
     
     if (lowerPrompt.includes('performance') || lowerPrompt.includes('grade')) {
-      return `Your academic performance shows strong progress across subjects. Your average score is 87.3%, with Mathematics being your strongest subject at 92% and English showing room for improvement at 81%. I recommend focusing on essay writing skills to boost your English performance.`;
+      return `📈 **Performance Insights**: School average: 84.7%. Strongest subjects: Mathematics (89.2%), Science (87.1%). Areas for improvement: English (78.9%), History (81.3%). Trend: 3.2% improvement over last semester. Recommendation: Focus on reading comprehension programs.`;
     }
     
     if (lowerPrompt.includes('timetable') || lowerPrompt.includes('schedule')) {
-      return `Your current timetable is well-balanced with 6 subjects across the week. You have the heaviest load on Tuesdays and Thursdays. Consider using your free periods on Mondays and Fridays for study sessions or homework completion.`;
+      return `📅 **Schedule Analysis**: Current timetables show optimal distribution across 14 classes. Peak hours: 10-11 AM (highest engagement). Recommendation: Schedule core subjects during peak hours, electives during afternoon slots for better learning outcomes.`;
+    }
+    
+    if (lowerPrompt.includes('student') || lowerPrompt.includes('class')) {
+      return `👥 **Student Overview**: Total enrolled: 420 students across 14 classes. Average class size: 30 students. Student-teacher ratio: 15:1. Top performing classes by attendance: Grade 12A, Grade 11B. Classes needing support: Grade 8A, Grade 9A.`;
     }
     
     if (lowerPrompt.includes('help') || lowerPrompt.includes('support')) {
-      return `I can help you with various aspects of your school management: analyzing attendance patterns, reviewing academic performance, optimizing your study schedule, and providing insights on your educational progress. What specific area would you like to explore?`;
+      return `🤖 **AI Assistant Capabilities**: I can analyze attendance patterns, performance trends, schedule optimization, student progress tracking, class comparisons, and generate detailed reports. Ask me about specific classes, subjects, or time periods for detailed insights.`;
     }
 
     // Default response
-    return `Thank you for your query: "${prompt}". I'm analyzing your school data to provide personalized insights. This AI assistant will help you understand patterns in your attendance, performance, and schedule to optimize your educational experience. What specific aspect of your school data would you like me to analyze?`;
+    return `🔍 **Query Processed**: "${prompt}". I'm your school management AI assistant. I can provide insights on attendance trends, academic performance, schedule optimization, student analytics, and administrative reports. Try asking about specific classes, subjects, or time periods for detailed analysis.`;
   };
 
   const askQuestion = async (prompt: string) => {

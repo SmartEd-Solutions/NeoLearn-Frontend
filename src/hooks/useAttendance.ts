@@ -33,7 +33,7 @@ export const useAttendance = (userId?: string) => {
   };
 
   const markAttendance = async (
-    userId: string,
+    studentUserId: string,
     date: string,
     status: AttendanceStatus,
     remarks?: string
@@ -42,10 +42,11 @@ export const useAttendance = (userId?: string) => {
       const { data, error } = await supabase
         .from('attendance')
         .upsert({
-          user_id: userId,
+          user_id: studentUserId,
           date,
           status,
           remarks: remarks || '',
+          recorded_by: userId,
         })
         .select()
         .single();
