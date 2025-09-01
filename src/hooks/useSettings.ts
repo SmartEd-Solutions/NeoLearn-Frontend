@@ -15,7 +15,7 @@ export const useSettings = (userId?: string) => {
     try {
       setLoading(true);
       const { data, error } = await supabase
-        .from('settings')
+        .from('user_settings')
         .select('*')
         .eq('user_id', userId)
         .single();
@@ -37,7 +37,7 @@ export const useSettings = (userId?: string) => {
 
     try {
       const { data, error } = await supabase
-        .from('settings')
+        .from('user_settings')
         .upsert({
           user_id: userId,
           ...updates,
