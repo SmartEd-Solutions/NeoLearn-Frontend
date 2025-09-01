@@ -33,9 +33,11 @@ export class FlutterwaveService {
 
   constructor() {
     this.publicKey = import.meta.env.VITE_FLUTTERWAVE_PUBLIC_KEY;
-    if (!this.publicKey) {
-      throw new Error('Flutterwave public key is not configured');
-    }
+  }
+
+  // Check if Flutterwave is configured
+  isConfigured(): boolean {
+    return !!this.publicKey;
   }
 
   // Generate unique transaction reference
@@ -45,6 +47,10 @@ export class FlutterwaveService {
 
   // Initialize payment
   async initializePayment(paymentData: FlutterwavePaymentData): Promise<FlutterwaveResponse> {
+    if (!this.isConfigured()) {
+      throw new Error('Flutterwave is not configured. Please add your public key to environment variables.');
+    }
+
     try {
       const response = await fetch('/api/flutterwave/initialize', {
         method: 'POST',

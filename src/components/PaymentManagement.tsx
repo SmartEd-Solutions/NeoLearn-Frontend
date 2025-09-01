@@ -42,6 +42,12 @@ const PaymentManagement = () => {
 
   const handleInitiatePayment = async (e: React.FormEvent) => {
     e.preventDefault();
+    
+    if (!flutterwaveService.isConfigured()) {
+      toast.error('Flutterwave is not configured. Please contact your administrator.');
+      return;
+    }
+    
     setIsProcessing(true);
 
     try {
