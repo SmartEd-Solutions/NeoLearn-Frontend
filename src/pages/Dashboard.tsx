@@ -16,13 +16,15 @@ import {
   ChevronRight,
   School,
   BarChart3,
-  UserCheck
+  UserCheck,
+  CreditCard
 } from 'lucide-react';
 import AIQueryBox from '@/components/AIQueryBox';
 import StudentManagement from '@/components/StudentManagement';
 import ClassManagement from '@/components/ClassManagement';
 import AttendanceManagement from '@/components/AttendanceManagement';
 import PerformanceManagement from '@/components/PerformanceManagement';
+import PaymentManagement from '@/components/PaymentManagement';
 import { useAuthContext } from '@/components/AuthProvider';
 import { useTimetable } from '@/hooks/useTimetable';
 import { useAttendance } from '@/hooks/useAttendance';
@@ -50,6 +52,7 @@ const Dashboard = () => {
       { id: 'timetable', label: 'Timetable', icon: Calendar },
       { id: 'attendance', label: 'Attendance', icon: Users },
       { id: 'performance', label: 'Performance', icon: BookOpen },
+      { id: 'payments', label: 'Payments', icon: CreditCard },
       { id: 'ai-query', label: 'AI Assistant', icon: Brain },
     ];
 
@@ -196,6 +199,9 @@ const Dashboard = () => {
 
       case 'classes':
         return <ClassManagement />;
+
+      case 'payments':
+        return <PaymentManagement />;
 
       case 'ai-query':
         return (

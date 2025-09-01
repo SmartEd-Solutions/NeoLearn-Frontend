@@ -5,6 +5,7 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Brain, Send, Loader2 } from 'lucide-react';
 import { useAuthContext } from '@/components/AuthProvider';
 import { useAssistant } from '@/hooks/useAssistant';
+import { openaiService } from '@/lib/openai';
 
 const AIQueryBox = () => {
   const { userProfile } = useAuthContext();
@@ -20,12 +21,27 @@ const AIQueryBox = () => {
     setIsLoading(true);
     
     try {
-      const { response: aiResponse, error } = await askQuestion(query);
-      if (error) {
-        setResponse('Sorry, I encountered an error processing your question. Please try again.');
+      // Try OpenAI first, fallback to mock response
+      let aiResponse: string;
+      
+      if (openaiService.isConfigured()) {
+        aiResponse = await openaiService.generateResponse(query, {
+          user_role: userProfile?.role,
+          user_name: userProfile?.full_name,
+        });
       } else {
-        setResponse(aiResponse);
+        const { response: mockResponse, error } = await askQuestion(query);
+        if (error) {
+          setResponse('Sorry, I encountered an error processing your question. Please try again.');
+          return;
+        }
+        aiResponse = mockResponse;
       }
+      
+      setResponse(aiResponse);
+      
+      // Save interaction to database
+      await askQuestion(query);
     } catch (error) {
       setResponse('Sorry, I encountered an error processing your question. Please try again.');
     } finally {
