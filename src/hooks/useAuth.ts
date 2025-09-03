@@ -18,12 +18,17 @@ export const useAuth = () => {
       }
     });
 
-    // Listen for auth changes
+    // Listen for auth changes - CRITICAL: Keep callback synchronous to prevent freezing
     const { data: { subscription } } = supabase.auth.onAuthStateChange(
-      async (event, session) => {
+      (event, session) => {
+        // Only synchronous state updates here
         setUser(session?.user ?? null);
+        
+        // Defer Supabase calls with setTimeout to prevent deadlock
         if (session?.user) {
-          await fetchUserProfile(session.user.id);
+          setTimeout(() => {
+            fetchUserProfile(session.user.id);
+          }, 0);
         } else {
           setUserProfile(null);
           setLoading(false);
