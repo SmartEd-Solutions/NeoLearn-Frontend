@@ -1,17 +1,18 @@
 
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { GraduationCap, Eye, EyeOff, ArrowLeft } from 'lucide-react';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { useAuthContext } from '@/components/AuthProvider';
 import { toast } from '@/components/ui/sonner';
 
 const Register = () => {
-  const { signUp } = useAuthContext();
+  const { signUp, user, loading } = useAuthContext();
+  const navigate = useNavigate();
   const [formData, setFormData] = useState({
     name: '',
     email: '',
@@ -23,10 +24,29 @@ const Register = () => {
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
 
+  // Redirect if already logged in
+  useEffect(() => {
+    if (!loading && user) {
+      navigate('/dashboard');
+    }
+  }, [user, loading, navigate]);
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+    
+    // Validation
     if (formData.password !== formData.confirmPassword) {
       toast.error('Passwords do not match');
+      return;
+    }
+    
+    if (formData.password.length < 6) {
+      toast.error('Password must be at least 6 characters long');
+      return;
+    }
+    
+    if (!formData.role) {
+      toast.error('Please select your role');
       return;
     }
     
@@ -41,13 +61,26 @@ const Register = () => {
       );
       
       if (error) {
-        toast.error('Registration failed: ' + error.message);
+        // Handle specific error cases with user-friendly messages
+        let errorMessage = 'Registration failed';
+        if (error.message.includes('User already registered')) {
+          errorMessage = 'An account with this email already exists. Please sign in instead.';
+        } else if (error.message.includes('Password should be at least')) {
+          errorMessage = 'Password must be at least 6 characters long.';
+        } else if (error.message.includes('Invalid email')) {
+          errorMessage = 'Please enter a valid email address.';
+        } else {
+          errorMessage = error.message;
+        }
+        toast.error(errorMessage);
       } else {
-        toast.success('Account created successfully!');
-        window.location.href = '/dashboard';
+        toast.success('Account created successfully! Please check your email to confirm your account.');
+        // Don't automatically redirect after signup, let them confirm email first
+        navigate('/login');
       }
     } catch (error) {
-      toast.error('An unexpected error occurred');
+      console.error('Registration error:', error);
+      toast.error('An unexpected error occurred. Please try again.');
     } finally {
       setIsLoading(false);
     }
@@ -59,6 +92,20 @@ const Register = () => {
       [e.target.name]: e.target.value
     }));
   };
+
+  // Show loading if checking authentication state
+  if (loading) {
+    return (
+      <div className="min-h-screen bg-gradient-hero flex items-center justify-center">
+        <Card className="w-96">
+          <CardContent className="flex items-center justify-center p-8">
+            <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-primary-foreground"></div>
+            <span className="text-primary-foreground ml-3">Loading...</span>
+          </CardContent>
+        </Card>
+      </div>
+    );
+  }
 
   return (
     <div className="min-h-screen bg-gradient-hero flex items-center justify-center p-4">

@@ -1,22 +1,30 @@
 
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { GraduationCap, Eye, EyeOff, ArrowLeft } from 'lucide-react';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { useAuthContext } from '@/components/AuthProvider';
 import { toast } from '@/components/ui/sonner';
 
 const Login = () => {
-  const { signIn } = useAuthContext();
+  const { signIn, user, loading } = useAuthContext();
+  const navigate = useNavigate();
   const [formData, setFormData] = useState({
     email: '',
     password: ''
   });
   const [showPassword, setShowPassword] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
+
+  // Redirect if already logged in
+  useEffect(() => {
+    if (!loading && user) {
+      navigate('/dashboard');
+    }
+  }, [user, loading, navigate]);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -26,13 +34,25 @@ const Login = () => {
       const { data, error } = await signIn(formData.email, formData.password);
       
       if (error) {
-        toast.error('Login failed: ' + error.message);
+        // Handle specific error cases with user-friendly messages
+        let errorMessage = 'Login failed';
+        if (error.message.includes('Invalid login credentials')) {
+          errorMessage = 'Invalid email or password. Please check your credentials.';
+        } else if (error.message.includes('Email not confirmed')) {
+          errorMessage = 'Please check your email and click the confirmation link before signing in.';
+        } else if (error.message.includes('Too many requests')) {
+          errorMessage = 'Too many login attempts. Please wait a moment before trying again.';
+        } else {
+          errorMessage = error.message;
+        }
+        toast.error(errorMessage);
       } else {
-        toast.success('Login successful!');
-        window.location.href = '/dashboard';
+        toast.success('Welcome back!');
+        navigate('/dashboard');
       }
     } catch (error) {
-      toast.error('An unexpected error occurred');
+      console.error('Login error:', error);
+      toast.error('An unexpected error occurred. Please try again.');
     } finally {
       setIsLoading(false);
     }
@@ -44,6 +64,20 @@ const Login = () => {
       [e.target.name]: e.target.value
     }));
   };
+
+  // Show loading if checking authentication state
+  if (loading) {
+    return (
+      <div className="min-h-screen bg-gradient-hero flex items-center justify-center">
+        <Card className="w-96">
+          <CardContent className="flex items-center justify-center p-8">
+            <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-primary-foreground"></div>
+            <span className="text-primary-foreground ml-3">Loading...</span>
+          </CardContent>
+        </Card>
+      </div>
+    );
+  }
 
   return (
     <div className="min-h-screen bg-gradient-hero flex items-center justify-center p-4">

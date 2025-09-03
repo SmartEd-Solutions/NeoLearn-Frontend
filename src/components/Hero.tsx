@@ -25,8 +25,8 @@ const Hero = () => {
             <Button size="lg" className="bg-white text-black hover:bg-white/90 shadow-elegant hover:shadow-glow transition-all duration-300" asChild>
               <a href="/register">Start Free Trial</a>
             </Button>
-            <Button size="lg" variant="outline" className="border-white/30 text-black hover:bg-white/10 backdrop-blur-sm transition-smooth" asChild>
-              <a href="/dashboard">Explore Dashboard</a>
+            <Button size="lg" variant="outline" className="border-white/30 text-white hover:bg-white/10 backdrop-blur-sm transition-smooth" asChild>
+              <a href="/login">Sign In</a>
             </Button>
           </div>
 
