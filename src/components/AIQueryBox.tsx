@@ -21,14 +21,18 @@ const AIQueryBox = () => {
     setIsLoading(true);
     
     try {
-      // Try OpenAI first, fallback to mock response
+      // Use OpenAI service with enhanced context
       let aiResponse: string;
       
       if (openaiService.isConfigured()) {
-        aiResponse = await openaiService.generateResponse(query, {
+        // Add school context for better responses
+        const schoolContext = {
           user_role: userProfile?.role,
           user_name: userProfile?.full_name,
-        });
+          school_context: "You are an AI assistant for a school management system. You can help with attendance tracking, performance analysis, scheduling, and general school administration questions. Provide helpful, professional responses related to educational management.",
+        };
+        
+        aiResponse = await openaiService.generateResponse(query, schoolContext);
       } else {
         const { response: mockResponse, error } = await askQuestion(query);
         if (error) {
@@ -43,11 +47,18 @@ const AIQueryBox = () => {
       // Save interaction to database
       await askQuestion(query);
     } catch (error) {
+      console.error('AI Query error:', error);
       setResponse('Sorry, I encountered an error processing your question. Please try again.');
     } finally {
       setIsLoading(false);
       setQuery('');
     }
+  };
+
+  const handleSuggestedQuery = (suggestedQuery: string) => {
+    setQuery(suggestedQuery);
+    const submitEvent = new Event('submit');
+    handleSubmit({ preventDefault: () => {}, ...submitEvent } as any);
   };
 
   return (
@@ -66,6 +77,7 @@ const AIQueryBox = () => {
       <CardContent className="space-y-4">
         <form onSubmit={handleSubmit} className="flex gap-2">
           <Input
+            id="ai-query-input"
             value={query}
             onChange={(e) => setQuery(e.target.value)}
             placeholder="e.g., 'Show me attendance trends for Grade 9' or 'Which students need academic support?'"

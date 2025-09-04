@@ -1,11 +1,12 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Badge } from '@/components/ui/badge';
 import { Label } from '@/components/ui/label';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
-import { Calendar, Users, CheckCircle, XCircle, Clock, AlertCircle } from 'lucide-react';
+import { Checkbox } from '@/components/ui/checkbox';
+import { Calendar, Users, CheckCircle, XCircle, Clock, AlertCircle, Save, UserPlus } from 'lucide-react';
 import { useAttendance } from '@/hooks/useAttendance';
 import { useStudents } from '@/hooks/useStudents';
 import { useClasses } from '@/hooks/useClasses';
@@ -13,14 +14,17 @@ import { useAuthContext } from '@/components/AuthProvider';
 import { AttendanceStatus } from '@/lib/supabase';
 import { toast } from '@/components/ui/sonner';
 import AttendanceChart from '@/components/charts/AttendanceChart';
+import { supabase } from '@/integrations/supabase/client';
 
 const AttendanceManagement = () => {
   const { userProfile } = useAuthContext();
-  const { attendance, markAttendance, getAttendanceStats } = useAttendance(userProfile?.id);
+  const { attendance, markAttendance, getAttendanceStats, refetch } = useAttendance(userProfile?.id);
   const { students } = useStudents(userProfile?.role, userProfile?.id);
   const { classes } = useClasses();
   const [selectedDate, setSelectedDate] = useState(new Date().toISOString().split('T')[0]);
   const [selectedClass, setSelectedClass] = useState<string>('');
+  const [bulkAttendance, setBulkAttendance] = useState<Record<string, AttendanceStatus>>({});
+  const [isSubmitting, setIsSubmitting] = useState(false);
 
   const handleMarkAttendance = async (studentId: string, status: AttendanceStatus) => {
     const { error } = await markAttendance(studentId, selectedDate, status);
@@ -30,6 +34,60 @@ const AttendanceManagement = () => {
     } else {
       toast.success(`Attendance marked as ${status}`);
     }
+  };
+
+  const handleBulkAttendance = (studentId: string, checked: boolean) => {
+    setBulkAttendance(prev => ({
+      ...prev,
+      [studentId]: checked ? 'present' : 'absent'
+    }));
+  };
+
+  const submitBulkAttendance = async () => {
+    if (!selectedClass || Object.keys(bulkAttendance).length === 0) {
+      toast.error('Please select a class and mark attendance for students');
+      return;
+    }
+
+    setIsSubmitting(true);
+    try {
+      const { data, error } = await supabase.rpc('bulk_mark_attendance', {
+        p_class_id: selectedClass,
+        p_date: selectedDate,
+        p_recorded_by: userProfile?.id,
+        p_attendance_data: bulkAttendance
+      });
+
+      if (error) {
+        toast.error('Failed to submit bulk attendance');
+        console.error('Bulk attendance error:', error);
+      } else {
+        toast.success(`Attendance marked for ${Object.keys(bulkAttendance).length} students`);
+        setBulkAttendance({});
+        refetch();
+      }
+    } catch (error) {
+      toast.error('Failed to submit attendance');
+      console.error('Bulk attendance error:', error);
+    } finally {
+      setIsSubmitting(false);
+    }
+  };
+
+  const markAllPresent = () => {
+    const newBulkAttendance: Record<string, AttendanceStatus> = {};
+    filteredStudents.forEach(student => {
+      newBulkAttendance[student.user_id] = 'present';
+    });
+    setBulkAttendance(newBulkAttendance);
+  };
+
+  const markAllAbsent = () => {
+    const newBulkAttendance: Record<string, AttendanceStatus> = {};
+    filteredStudents.forEach(student => {
+      newBulkAttendance[student.user_id] = 'absent';
+    });
+    setBulkAttendance(newBulkAttendance);
   };
 
   const getStatusIcon = (status: AttendanceStatus) => {
@@ -52,15 +110,33 @@ const AttendanceManagement = () => {
     }
   };
 
-  // Generate chart data
+  // Generate real chart data from attendance records
   const attendanceStats = getAttendanceStats();
-  const chartData = [
-    { date: 'Mon', present: 28, absent: 2, late: 1, excused: 0 },
-    { date: 'Tue', present: 29, absent: 1, late: 1, excused: 0 },
-    { date: 'Wed', present: 27, absent: 3, late: 1, excused: 0 },
-    { date: 'Thu', present: 30, absent: 1, late: 0, excused: 0 },
-    { date: 'Fri', present: 26, absent: 2, late: 2, excused: 1 },
-  ];
+  
+  // Create weekly chart data from real attendance data
+  const generateWeeklyChartData = () => {
+    const days = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'];
+    const today = new Date();
+    const weekStart = new Date(today.setDate(today.getDate() - today.getDay() + 1));
+    
+    return days.map((day, index) => {
+      const date = new Date(weekStart);
+      date.setDate(weekStart.getDate() + index);
+      const dateStr = date.toISOString().split('T')[0];
+      
+      const dayAttendance = attendance.filter(record => record.date === dateStr);
+      
+      return {
+        date: day,
+        present: dayAttendance.filter(r => r.status === 'present').length,
+        absent: dayAttendance.filter(r => r.status === 'absent').length,
+        late: dayAttendance.filter(r => r.status === 'late').length,
+        excused: dayAttendance.filter(r => r.status === 'excused').length,
+      };
+    });
+  };
+
+  const chartData = generateWeeklyChartData();
 
   const pieData = [
     { name: 'Present', value: attendanceStats.presentDays, color: '#10b981' },
@@ -160,13 +236,82 @@ const AttendanceManagement = () => {
       {/* Charts */}
       <AttendanceChart data={chartData} pieData={pieData} />
 
-      {/* Attendance Marking */}
+      {/* Bulk Attendance Marking */}
+      {(userProfile?.role === 'admin' || userProfile?.role === 'teacher') && selectedClass && (
+        <Card className="shadow-card">
+          <CardHeader>
+            <CardTitle className="flex items-center gap-2">
+              <UserPlus className="h-5 w-5" />
+              Quick Attendance - {new Date(selectedDate).toLocaleDateString()}
+            </CardTitle>
+            <div className="flex gap-2 mt-4">
+              <Button 
+                variant="outline" 
+                size="sm" 
+                onClick={markAllPresent}
+                className="text-green-600 hover:bg-green-50"
+              >
+                Mark All Present
+              </Button>
+              <Button 
+                variant="outline" 
+                size="sm" 
+                onClick={markAllAbsent}
+                className="text-red-600 hover:bg-red-50"
+              >
+                Mark All Absent
+              </Button>
+              <Button 
+                onClick={submitBulkAttendance}
+                disabled={isSubmitting || Object.keys(bulkAttendance).length === 0}
+                className="ml-auto"
+              >
+                <Save className="h-4 w-4 mr-2" />
+                {isSubmitting ? 'Saving...' : `Save Attendance (${Object.keys(bulkAttendance).length})`}
+              </Button>
+            </div>
+          </CardHeader>
+          <CardContent>
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+              {filteredStudents.map((student) => {
+                const attendanceRecord = todaysAttendance.find(record => record.user_id === student.user_id);
+                const isChecked = bulkAttendance[student.user_id] === 'present';
+                
+                return (
+                  <div key={student.id} className="flex items-center justify-between p-3 border rounded-lg">
+                    <div className="flex items-center space-x-3">
+                      <Checkbox
+                        id={student.user_id}
+                        checked={isChecked}
+                        onCheckedChange={(checked) => handleBulkAttendance(student.user_id, checked as boolean)}
+                      />
+                      <div>
+                        <label htmlFor={student.user_id} className="text-sm font-medium cursor-pointer">
+                          {student.user?.full_name}
+                        </label>
+                        <p className="text-xs text-muted-foreground">{student.student_id}</p>
+                      </div>
+                    </div>
+                    {attendanceRecord && (
+                      <Badge className={getStatusColor(attendanceRecord.status)} variant="outline">
+                        {attendanceRecord.status}
+                      </Badge>
+                    )}
+                  </div>
+                );
+              })}
+            </div>
+          </CardContent>
+        </Card>
+      )}
+
+      {/* Individual Attendance Marking */}
       {(userProfile?.role === 'admin' || userProfile?.role === 'teacher') && (
         <Card className="shadow-card">
           <CardHeader>
             <CardTitle className="flex items-center gap-2">
               <Calendar className="h-5 w-5" />
-              Mark Attendance - {new Date(selectedDate).toLocaleDateString()}
+              Detailed Attendance - {new Date(selectedDate).toLocaleDateString()}
             </CardTitle>
           </CardHeader>
           <CardContent>

@@ -25,6 +25,7 @@ import ClassManagement from '@/components/ClassManagement';
 import AttendanceManagement from '@/components/AttendanceManagement';
 import PerformanceManagement from '@/components/PerformanceManagement';
 import PaymentManagement from '@/components/PaymentManagement';
+import TimetableManagement from '@/components/TimetableManagement';
 import { useAuthContext } from '@/components/AuthProvider';
 import { useTimetable } from '@/hooks/useTimetable';
 import { useAttendance } from '@/hooks/useAttendance';
@@ -56,6 +57,7 @@ const Dashboard = () => {
       { id: 'ai-query', label: 'AI Assistant', icon: Brain },
     ];
 
+    // Show Students and Classes management for admins only
     if (userProfile?.role === 'admin') {
       baseItems.splice(2, 0, 
         { id: 'students', label: 'Students', icon: UserCheck },
@@ -120,73 +122,7 @@ const Dashboard = () => {
   const renderContent = () => {
     switch (activeSection) {
       case 'timetable':
-        return (
-          <div className="space-y-6">
-            <h2 className="text-2xl font-bold text-foreground">Timetable</h2>
-            <Card className="shadow-card">
-              <CardHeader>
-                <CardTitle>Today's Schedule ({new Date().toLocaleDateString('en-US', { weekday: 'long' })})</CardTitle>
-              </CardHeader>
-              <CardContent>
-                {todaysTimetable.length > 0 ? (
-                  <div className="space-y-4">
-                    {todaysTimetable.map((entry) => (
-                      <div key={entry.id} className="flex items-center justify-between p-4 bg-gradient-card rounded-lg">
-                        <div>
-                          <h4 className="font-semibold">{entry.subject}</h4>
-                          <p className="text-muted-foreground text-sm">{entry.location}</p>
-                        </div>
-                        <Badge variant="outline">{entry.start_time} - {entry.end_time}</Badge>
-                      </div>
-                    ))}
-                  </div>
-                ) : (
-                  <div className="text-center py-8 text-muted-foreground">
-                    <Calendar className="h-12 w-12 mx-auto mb-4 opacity-50" />
-                    <p>No classes scheduled for today</p>
-                  </div>
-                )}
-              </CardContent>
-            </Card>
-
-            <Card className="shadow-card">
-              <CardHeader>
-                <CardTitle>Weekly Schedule</CardTitle>
-              </CardHeader>
-              <CardContent>
-                {todaysTimetable.length > 0 ? (
-                  <div className="space-y-4">
-                    {['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'].map(day => {
-                      const dayEntries = todaysTimetable.filter(entry => entry.day === day);
-                      return (
-                        <div key={day} className="border rounded-lg p-4">
-                          <h4 className="font-semibold mb-2">{day}</h4>
-                          {dayEntries.length > 0 ? (
-                            <div className="space-y-2">
-                              {dayEntries.map(entry => (
-                                <div key={entry.id} className="flex items-center justify-between text-sm">
-                                  <span>{entry.subject} - {entry.location}</span>
-                                  <span className="text-muted-foreground">{entry.start_time} - {entry.end_time}</span>
-                                </div>
-                              ))}
-                            </div>
-                          ) : (
-                            <p className="text-muted-foreground text-sm">No classes scheduled</p>
-                          )}
-                        </div>
-                      );
-                    })}
-                  </div>
-                ) : (
-                  <div className="text-center py-8 text-muted-foreground">
-                    <Calendar className="h-12 w-12 mx-auto mb-4 opacity-50" />
-                    <p>No schedule available</p>
-                  </div>
-                )}
-              </CardContent>
-            </Card>
-          </div>
-        );
+        return <TimetableManagement />;
       
       case 'attendance':
         return <AttendanceManagement />;
@@ -217,25 +153,65 @@ const Dashboard = () => {
               </CardHeader>
               <CardContent>
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                  <Button variant="outline" className="justify-start text-left h-auto p-4">
+                  <Button 
+                    variant="outline" 
+                    className="justify-start text-left h-auto p-4"
+                    onClick={() => {
+                      const aiQueryBox = document.querySelector('#ai-query-input') as HTMLInputElement;
+                      if (aiQueryBox) {
+                        aiQueryBox.value = "Show me today's attendance summary for all classes";
+                        aiQueryBox.focus();
+                      }
+                    }}
+                  >
                     <div>
                       <div className="font-medium">Today's Attendance Summary</div>
                       <div className="text-muted-foreground text-sm">Get attendance insights for all classes</div>
                     </div>
                   </Button>
-                  <Button variant="outline" className="justify-start text-left h-auto p-4">
+                  <Button 
+                    variant="outline" 
+                    className="justify-start text-left h-auto p-4"
+                    onClick={() => {
+                      const aiQueryBox = document.querySelector('#ai-query-input') as HTMLInputElement;
+                      if (aiQueryBox) {
+                        aiQueryBox.value = "Analyze student performance trends over the past month";
+                        aiQueryBox.focus();
+                      }
+                    }}
+                  >
                     <div>
                       <div className="font-medium">Performance Trends</div>
                       <div className="text-muted-foreground text-sm">Analyze student performance over time</div>
                     </div>
                   </Button>
-                  <Button variant="outline" className="justify-start text-left h-auto p-4">
+                  <Button 
+                    variant="outline" 
+                    className="justify-start text-left h-auto p-4"
+                    onClick={() => {
+                      const aiQueryBox = document.querySelector('#ai-query-input') as HTMLInputElement;
+                      if (aiQueryBox) {
+                        aiQueryBox.value = "Help me optimize my class schedule and resource allocation";
+                        aiQueryBox.focus();
+                      }
+                    }}
+                  >
                     <div>
                       <div className="font-medium">Schedule Optimization</div>
                       <div className="text-muted-foreground text-sm">Optimize timetables and resource allocation</div>
                     </div>
                   </Button>
-                  <Button variant="outline" className="justify-start text-left h-auto p-4">
+                  <Button 
+                    variant="outline" 
+                    className="justify-start text-left h-auto p-4"
+                    onClick={() => {
+                      const aiQueryBox = document.querySelector('#ai-query-input') as HTMLInputElement;
+                      if (aiQueryBox) {
+                        aiQueryBox.value = "Compare performance across different classes and identify improvement areas";
+                        aiQueryBox.focus();
+                      }
+                    }}
+                  >
                     <div>
                       <div className="font-medium">Class Performance Analysis</div>
                       <div className="text-muted-foreground text-sm">Compare performance across different classes</div>
