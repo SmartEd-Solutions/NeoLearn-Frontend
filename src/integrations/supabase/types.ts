@@ -82,6 +82,13 @@ export type Database = {
             foreignKeyName: "attendance_class_id_fkey"
             columns: ["class_id"]
             isOneToOne: false
+            referencedRelation: "attendance_class_stats"
+            referencedColumns: ["class_id"]
+          },
+          {
+            foreignKeyName: "attendance_class_id_fkey"
+            columns: ["class_id"]
+            isOneToOne: false
             referencedRelation: "classes"
             referencedColumns: ["id"]
           },
@@ -242,6 +249,13 @@ export type Database = {
             foreignKeyName: "students_class_id_fkey"
             columns: ["class_id"]
             isOneToOne: false
+            referencedRelation: "attendance_class_stats"
+            referencedColumns: ["class_id"]
+          },
+          {
+            foreignKeyName: "students_class_id_fkey"
+            columns: ["class_id"]
+            isOneToOne: false
             referencedRelation: "classes"
             referencedColumns: ["id"]
           },
@@ -308,6 +322,13 @@ export type Database = {
             foreignKeyName: "teacher_subjects_class_id_fkey"
             columns: ["class_id"]
             isOneToOne: false
+            referencedRelation: "attendance_class_stats"
+            referencedColumns: ["class_id"]
+          },
+          {
+            foreignKeyName: "teacher_subjects_class_id_fkey"
+            columns: ["class_id"]
+            isOneToOne: false
             referencedRelation: "classes"
             referencedColumns: ["id"]
           },
@@ -365,6 +386,13 @@ export type Database = {
           user_id?: string
         }
         Relationships: [
+          {
+            foreignKeyName: "timetable_class_id_fkey"
+            columns: ["class_id"]
+            isOneToOne: false
+            referencedRelation: "attendance_class_stats"
+            referencedColumns: ["class_id"]
+          },
           {
             foreignKeyName: "timetable_class_id_fkey"
             columns: ["class_id"]
@@ -458,9 +486,35 @@ export type Database = {
       }
     }
     Views: {
-      [_ in never]: never
+      attendance_class_stats: {
+        Row: {
+          absent_count: number | null
+          attendance_rate: number | null
+          class_id: string | null
+          class_name: string | null
+          date: string | null
+          excused_count: number | null
+          late_count: number | null
+          present_count: number | null
+          total_students: number | null
+        }
+        Relationships: []
+      }
     }
     Functions: {
+      bulk_mark_attendance: {
+        Args: {
+          p_attendance_data: Json
+          p_class_id: string
+          p_date: string
+          p_recorded_by: string
+        }
+        Returns: {
+          affected_rows: number
+          message: string
+          success: boolean
+        }[]
+      }
       get_user_role: {
         Args: { user_id: string }
         Returns: Database["public"]["Enums"]["user_role"]
